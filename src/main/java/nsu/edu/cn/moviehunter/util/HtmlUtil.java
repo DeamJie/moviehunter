@@ -17,7 +17,7 @@ public class HtmlUtil {
         URLConnection conn =  url.openConnection();
         conn.setConnectTimeout(5000);
         //获得数据
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "gbk"));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
         StringBuilder html = new StringBuilder();
         String line;
         while ((line = bufferedReader.readLine()) != null) {

@@ -106,4 +106,59 @@ public class MovieDataHunter {
             }catch (Exception exception){
         }
     }
+
+    /**
+     * 从80的电影详情界面上获取电影的信息
+     * @param s
+     * @return
+     */
+    public Movie getMovieDataFrom80s(String s){
+        String html = "";
+        try {
+            html = htmlUtil.getHtml(s);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(html == null){
+            return null;
+        }else {
+            Movie movie = new Movie();
+            Elements tables = Jsoup.parse(html).select("span.span_block");
+            for (Element e : tables){
+                if(e.text().contains("类型：")){
+                    System.out.println(e.text().split("：")[1].trim());
+                }
+                if(e.text().contains("地区：")){
+                    System.out.println(e.text().split("：")[1].trim());
+                }
+                if(e.text().contains("语言：")){
+                    System.out.println(e.text().split("：")[1].trim());
+                }
+                if(e.text().contains("导演：")){
+                    System.out.println(e.text().split("：")[1].trim());
+                }
+                if(e.text().contains("上映日期：")){
+                    System.out.println(e.text().split("：")[1].trim().substring(0,4));
+                }
+                if(e.text().contains("片长：")){
+                    System.out.println(e.text().split("：")[1].trim());
+                }
+            }
+
+            Elements nameAndImg = Jsoup.parse(html).select("div.img").select("img");
+            for (Element e : nameAndImg){
+                System.out.println("img:"+e.attr("src"));
+                System.out.println("name:"+e.attr("title"));
+            }
+
+            Elements introduce = Jsoup.parse(html).select("p#movie_content_all");
+            System.out.println(introduce.text());
+
+            Elements download = Jsoup.parse(html).select("form#myform").select("a[thunderpid]");
+            System.out.println(download.first().attr("href"));
+
+        }
+    }
+
+
 }

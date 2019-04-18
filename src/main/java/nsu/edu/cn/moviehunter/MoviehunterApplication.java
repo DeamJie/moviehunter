@@ -50,9 +50,16 @@ public class MoviehunterApplication implements CommandLineRunner {
 //		    hunterExcuter.excut();
 //		movieUrlHunter.getUrl("http://s.ygdy8.com/plus/so.php?typeid=1&keyword=%CF%B2%BE%E7");
 //        System.out.println(movieUrlHunter.getNum("http://s.ygdy8.com/plus/so.php?keyword=%D5%BD%D5%F9&searchtype=titlekeyword&channeltype=0&orderby=&kwtype=0&pagesize=10&typeid=1&TotalResult=101&PageNo=7"));
-		removerExcuter.removeToMySql();
+//		removerExcuter.removeToMySql();
 //		Movie movie = movieDataHunter.getData("https://www.ygdy8.com/html/gndy/dyzz/20170918/55052.html",7);
 //		movieMapper.insertMovie(movie);
+//		try {
+//			new MovieUrlHunter().getUrlFrom80s("http://www.80s.la/movie/list/1----h");
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		System.out.println(new MovieUrlHunter().getNumOf80S("http://www.80s.la/movie/list/1----h"));
+		new MovieDataHunter().getMovieDataFrom80s("http://www.80s.la/movie/1346");
 	}
 }
 
