@@ -8,8 +8,8 @@ import java.util.List;
 
 @Mapper
 public interface MovieMapper {
-    String SELECT_KEY = "id,name,translationname,time,country,score,intro,labelid,img,download";
-    String INSERT_KEY ="name,translationname,time,country,score,intro,labelid,img,download";
+    String SELECT_KEY = "id,name,time,country,score,intro,labelid,img,download";
+    String INSERT_KEY ="name,time,country,score,intro,labelid,img,download";
 
     @Select({"select " ,SELECT_KEY,"from movie where labelid = #{labelid}"})
     List<Movie> selectByLabel(int labelid);
@@ -23,7 +23,7 @@ public interface MovieMapper {
     @Select({"select " ,SELECT_KEY,"from movie where id = #{id}"})
     Movie selectById(int id);
 
-    @Insert({"insert into movie" ,"(" ,INSERT_KEY,") values (#{name},#{translationname},#{time},#{country},#{score},#{intro}," +
+    @Insert({"insert into movie" ,"(" ,INSERT_KEY,") values (#{name},#{time},#{country},#{score},#{intro}," +
             "#{labelid},#{img},#{download})"})
     void insertMovie(Movie movie);
 }

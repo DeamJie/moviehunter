@@ -1,18 +1,18 @@
 package nsu.edu.cn.moviehunter.hunter;
 
 
-
 import nsu.edu.cn.moviehunter.basket.Basket;
 import nsu.edu.cn.moviehunter.util.HtmlUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Repository
@@ -23,7 +23,7 @@ public class MovieUrlHunter {
     Basket basket;
     public void getUrl(String s,String tableName) throws IOException {
         String html = htmlUtil.getHtml(s);
-        String pre = "https://www.ygdy8.com";
+        String pre = "http://www.80s.la";
         if (html==null){
 
         }else {
@@ -61,7 +61,7 @@ public class MovieUrlHunter {
      * @param s 网址
      * @throws IOException
      */
-    public void getUrlFrom80s(String s) throws IOException {
+    public void getUrlFrom80s(String s,String tableName) throws IOException {
         String html = htmlUtil.getHtml(s);
         String pre = "http://www.80s.la";
         if(html == null){
@@ -72,6 +72,7 @@ public class MovieUrlHunter {
             Elements urls = tables.select("a[title]");
             for(Element e : urls){
                 System.out.println(e.attr("href"));
+                basket.putUrl(pre+e.attr("href"),tableName);
             }
         }
     }

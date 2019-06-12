@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Repository
 public class MovieDataHunter {
@@ -79,9 +81,6 @@ public class MovieDataHunter {
                     String s = sb.toString();
                     movie.setIntro(s.replaceAll(" ", ""));
                 } else if (sss[i].contains("◎")) {
-                    if (sss[i].contains("◎译　　名")) {
-                        movie.setTranslationname(sss[i].substring(5));
-                    }
                     if (sss[i].contains("◎片　　名")) {
                         movie.setName(sss[i].substring(5));
                     }
@@ -112,53 +111,68 @@ public class MovieDataHunter {
      * @param s
      * @return
      */
-    public Movie getMovieDataFrom80s(String s){
-        String html = "";
-        try {
-            html = htmlUtil.getHtml(s);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if(html == null){
-            return null;
-        }else {
-            Movie movie = new Movie();
-            Elements tables = Jsoup.parse(html).select("span.span_block");
-            for (Element e : tables){
-                if(e.text().contains("类型：")){
-                    System.out.println(e.text().split("：")[1].trim());
-                }
-                if(e.text().contains("地区：")){
-                    System.out.println(e.text().split("：")[1].trim());
-                }
-                if(e.text().contains("语言：")){
-                    System.out.println(e.text().split("：")[1].trim());
-                }
-                if(e.text().contains("导演：")){
-                    System.out.println(e.text().split("：")[1].trim());
-                }
-                if(e.text().contains("上映日期：")){
-                    System.out.println(e.text().split("：")[1].trim().substring(0,4));
-                }
-                if(e.text().contains("片长：")){
-                    System.out.println(e.text().split("：")[1].trim());
-                }
+    public Movie getMovieDataFrom80s(String s,int typeId){
+        Movie movie = new Movie();
+        try{ String html = "";
+            movie = new Movie();
+            try {
+                html = htmlUtil.getHtml(s);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            if(html == null){
 
-            Elements nameAndImg = Jsoup.parse(html).select("div.img").select("img");
-            for (Element e : nameAndImg){
-                System.out.println("img:"+e.attr("src"));
-                System.out.println("name:"+e.attr("title"));
+            }else {
+                Elements tables = Jsoup.parse(html).select("span.span_block");
+                Elements tables1 = Jsoup.parse(html).select("div[style=float:left; margin-right:10px;]");
+                Elements tables2 = Jsoup.parse(html).select("h1.font14w");
+                String regEx="[^0-9]";
+                Pattern p = Pattern.compile(regEx);
+                Matcher m = p.matcher(tables2.text());
+                movie.setTime(Integer.valueOf(m.replaceAll("").trim()));
+                if(tables1.text().indexOf("豆瓣评分：") != -1){
+                    movie.setScore(Double.valueOf(tables1.text().replaceAll("豆瓣评分： ","")));}
+                for (Element e : tables){
+                    System.out.println(e.toString());
+                    if(e.text().contains("类型：")){
+                        movie.setLabelid(typeId);
+
+                    }
+                    if(e.text().contains("地区：")){
+                        movie.setCountry(e.text().split("：")[1].trim());
+                        System.out.println(e.text().split("：")[1].trim());
+                    }
+                    if(e.text().contains("上映日期：")){
+                        movie.setTime(Integer.valueOf(e.text().split("：")[1].trim().substring(0,4)));
+                        System.out.println(e.text().split("：")[1].trim().substring(0,4));
+                    }
+                }
+
+                Elements nameAndImg = Jsoup.parse(html).select("div.img").select("img");
+                for (Element e : nameAndImg){
+                    movie.setImg(e.attr("src"));
+                    System.out.println("img:"+e.attr("src"));
+                    movie.setName(e.attr("title"));
+                    System.out.println("name:"+e.attr("title"));
+                }
+
+                Elements introduce = Jsoup.parse(html).select("p#movie_content_all");
+                movie.setIntro(introduce.text());
+                System.out.println(introduce.text());
+
+                Elements download = Jsoup.parse(html).select("form#myform").select("a[thunderpid]");
+                movie.setDownload(download.first().attr("href"));
+                System.out.println(download.first().attr("href"));
             }
+            try {
+                Thread.sleep(466);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            return movie;
 
-            Elements introduce = Jsoup.parse(html).select("p#movie_content_all");
-            System.out.println(introduce.text());
-
-            Elements download = Jsoup.parse(html).select("form#myform").select("a[thunderpid]");
-            System.out.println(download.first().attr("href"));
-
+        }catch (Exception e){
+         return  movie;
         }
     }
-
-
 }

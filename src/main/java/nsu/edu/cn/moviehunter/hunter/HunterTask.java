@@ -22,20 +22,20 @@ public class HunterTask implements Runnable{
     public void run() {
         int j=20;
         try {
-            j=movieUrlHunter.getNum(startUrl.replace("num",String.valueOf(1)));
+            j=movieUrlHunter.getNumOf80S(startUrl.replace("num",String.valueOf(1)));
             System.out.println(j);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         for(int i=1;i<=j;i++){
             try {
-               movieUrlHunter.getUrl(startUrl.replace("num","PageNo="+String.valueOf(i)),listName+"");
+               movieUrlHunter.getUrlFrom80s(startUrl.replace("num",String.valueOf(i)),listName+"");
                Thread.sleep(1000);
                 System.out.println(i);
             } catch (IOException e) {
                 System.out.println("URL错误"+e.getMessage());
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println("URL错误"+e.getMessage());
             }
         }
     }

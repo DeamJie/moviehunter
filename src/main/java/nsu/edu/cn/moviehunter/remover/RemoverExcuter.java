@@ -17,9 +17,9 @@ public class RemoverExcuter {
     private MovieDataHunter movieDataHunter;
     public void removeToMySql(){
         while (true){
-            ArrayList<String> url = (ArrayList<String>) basket.getUrl(200,"6");
+            ArrayList<String> url = (ArrayList<String>) basket.getUrl(200,"7");
             System.out.println(url.get(1));
-            Movie movie = movieDataHunter.getData(url.get(1),6);
+            Movie movie = movieDataHunter.getMovieDataFrom80s(url.get(1),7);
             if (movie!=null)
             movieMapper.insertMovie(movie);
         }

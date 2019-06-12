@@ -5,8 +5,6 @@ public class Movie {
 
     private String name;
 
-    private String translationname;
-
     private Integer time;
 
     private String country;
@@ -64,14 +62,6 @@ public class Movie {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
-    }
-
-    public String getTranslationname() {
-        return translationname;
-    }
-
-    public void setTranslationname(String translationname) {
-        this.translationname = translationname == null ? null : translationname.trim();
     }
 
     public Integer getTime() {
