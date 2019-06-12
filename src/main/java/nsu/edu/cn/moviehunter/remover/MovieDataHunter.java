@@ -118,7 +118,7 @@ public class MovieDataHunter {
             try {
                 html = htmlUtil.getHtml(s);
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
             if(html == null){
 
@@ -133,41 +133,33 @@ public class MovieDataHunter {
                 if(tables1.text().indexOf("豆瓣评分：") != -1){
                     movie.setScore(Double.valueOf(tables1.text().replaceAll("豆瓣评分： ","")));}
                 for (Element e : tables){
-                    System.out.println(e.toString());
                     if(e.text().contains("类型：")){
                         movie.setLabelid(typeId);
 
                     }
                     if(e.text().contains("地区：")){
                         movie.setCountry(e.text().split("：")[1].trim());
-                        System.out.println(e.text().split("：")[1].trim());
                     }
                     if(e.text().contains("上映日期：")){
                         movie.setTime(Integer.valueOf(e.text().split("：")[1].trim().substring(0,4)));
-                        System.out.println(e.text().split("：")[1].trim().substring(0,4));
                     }
                 }
 
                 Elements nameAndImg = Jsoup.parse(html).select("div.img").select("img");
                 for (Element e : nameAndImg){
                     movie.setImg(e.attr("src"));
-                    System.out.println("img:"+e.attr("src"));
                     movie.setName(e.attr("title"));
-                    System.out.println("name:"+e.attr("title"));
                 }
 
                 Elements introduce = Jsoup.parse(html).select("p#movie_content_all");
                 movie.setIntro(introduce.text());
-                System.out.println(introduce.text());
 
                 Elements download = Jsoup.parse(html).select("form#myform").select("a[thunderpid]");
                 movie.setDownload(download.first().attr("href"));
-                System.out.println(download.first().attr("href"));
             }
             try {
-                Thread.sleep(466);
+                Thread.sleep(4000*typeId);
             } catch (InterruptedException e1) {
-                e1.printStackTrace();
             }
             return movie;
 

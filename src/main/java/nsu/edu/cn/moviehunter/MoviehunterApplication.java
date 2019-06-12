@@ -1,5 +1,6 @@
 package nsu.edu.cn.moviehunter;
 
+import nsu.edu.cn.moviehunter.remover.RemoverExcuter;
 import nsu.edu.cn.moviehunter.util.Label;
 import nsu.edu.cn.moviehunter.util.LabelMapper;
 import nsu.edu.cn.moviehunter.util.QuatzUtil;
@@ -34,6 +35,7 @@ public class MoviehunterApplication implements CommandLineRunner {
 		for (Label l : labelList){
 			try {
 				quatzUtil.startJob(l);
+				new Thread(new RemoverExcuter(l.getId())).start();
 			} catch (SchedulerException e) {
 				logger.error("开启任务失败"+l.getName());
 			}

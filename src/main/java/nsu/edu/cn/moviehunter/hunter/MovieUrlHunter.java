@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.io.IOException;
 
 
-@Repository
+@Repository("movieUrlHunter")
 public class MovieUrlHunter {
     @Autowired
     HtmlUtil htmlUtil;
@@ -87,7 +87,7 @@ public class MovieUrlHunter {
         try {
             html = htmlUtil.getHtml(s);
         } catch (IOException e) {
-            e.printStackTrace();
+
         }
         if(html == null){
             return 0;
@@ -95,7 +95,6 @@ public class MovieUrlHunter {
             Document doc = Jsoup.parse(html);
             Elements tables = doc.select("div.pager").select("a[href]");
             String finalPageUrl = tables.last().attr("href");
-            System.out.println(finalPageUrl);
             String[] pages = finalPageUrl.split("p");
             return  Integer.parseInt(pages[pages.length-1]);
         }

@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class QuatzUtil {
-    private final  String cronString = "0 46 * ? * *";
-    private final String testCornString ="";
+    private final  String testCornString = "0 15 * * * ?";//15分钟时执行
+    private final String cronString ="0 0 3 * * ?";//每天3点执行
     @Autowired
     private Scheduler scheduler;
 
@@ -17,7 +17,7 @@ public class QuatzUtil {
         String group = "label";
         JobDetail jobDetail = JobBuilder.newJob(UrlJob.class).withIdentity(name,group).build();
         jobDetail.getJobDataMap().put("label",label);
-        CronScheduleBuilder cron = CronScheduleBuilder.cronSchedule(cronString).withMisfireHandlingInstructionDoNothing();
+        CronScheduleBuilder cron = CronScheduleBuilder.cronSchedule(testCornString).withMisfireHandlingInstructionDoNothing();
         CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity(name, group).withSchedule(cron).build();
         scheduler.scheduleJob(jobDetail, cronTrigger);
         scheduler.start();
